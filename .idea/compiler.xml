@@ -9,5 +9,8 @@
         <module name="kODE" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="kODE" target="1.5" />
+    </bytecodeTargetLevel>
   </component>
 </project>

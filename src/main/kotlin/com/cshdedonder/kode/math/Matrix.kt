@@ -1,5 +1,6 @@
 package com.cshdedonder.kode.math
 
+import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 class Matrix(val nRows: Int, val nCols: Int, init: (Int, Int) -> Double) {
@@ -30,26 +31,86 @@ class Matrix(val nRows: Int, val nCols: Int, init: (Int, Int) -> Double) {
     val t: Matrix
         get() = transpose()
 
-    fun applyFunByRow(f: (Vector) -> Vector): Matrix {
+    inline fun applyFunByRow(f: (Int, Vector) -> Vector): Matrix {
         val vs: MutableList<Vector> = ArrayList(nRows)
         for (i in 0 until nRows) {
-            vs += f(Vector(nCols) { j -> get(i, j) })
+            vs += f(i, Vector(nCols) { j -> get(i, j) })
         }
         return Matrix(dimensions) { i, j -> vs[i][j] }
     }
 
+    private fun LUPDecompose(tol: Double = 1e-40): Pair<Matrix, IntArray> {
+        check(nRows == nCols) { "Matrix needs to be square for LUP decomposition." }
+        val n = nRows
+        val p: IntArray = IntArray(n) { i -> i }
+        val A = copy()
+        println(A)
+        for (i in 0 until n) {
+            var maxA = 0.0
+            var imax = i
+            for (k in i until n) {
+                if (get(k, i).absoluteValue > maxA) {
+                    maxA = get(k, i).absoluteValue
+                    imax = k
+                }
+            }
+            check(maxA > tol) { "Matrix is degenerate: maxA = $maxA, A = $A" }
+            if (imax != i) {
+                val j = p[i]
+                p[i] = p[imax]
+                p[imax] = j
+                val row = A.elements[i]
+                A.elements[i] = A.elements[imax]
+                A.elements[imax] = row
+            }
+            for (j in (i + 1) until n) {
+                A[j, i] /= A[i, i]
+                for (k in (i + 1) until n) {
+                    A[j, k] -= A[j, i] * A[i, k]
+                }
+            }
+            println(A)
+        }
+        return Pair(A, p)
+    }
+
+    private operator fun set(i: Int, j: Int, x: Double) {
+        elements[i][j] = x
+    }
+
+    private fun copy(): Matrix = Matrix(nRows, nCols) { i, j -> get(i, j) }
+
+    fun solve(b: Vector): Vector {
+        val (A: Matrix, p: IntArray) = LUPDecompose()
+        val n = nRows
+        val x = DoubleArray(n)
+        for (i in 0 until n) {
+            x[i] = b[p[i]]
+            for (k in 0 until i) {
+                x[i] -= A[i, k] * x[k]
+            }
+        }
+        for (i in (n - 1) downTo 0) {
+            for (k in (i + 1) until n) {
+                x[i] -= A[i, k] * x[k]
+            }
+            x[i] /= A[i, i]
+        }
+        return Vector.of(*x)
+    }
+
     override fun toString(): String = elements.joinToString(separator = " \n ", prefix = "[", postfix = "]") {
         it.joinToString(
-            separator = ", ",
-            prefix = "[",
-            postfix = "]"
+                separator = ", ",
+                prefix = "[",
+                postfix = "]"
         ) { x -> "%e".format(x) }
     }
 
     override fun hashCode(): Int = elements.contentDeepHashCode()
 
     override fun equals(other: Any?): Boolean =
-        if (other is Matrix) elements.contentDeepEquals(other.elements) else false
+            if (other is Matrix) elements.contentDeepEquals(other.elements) else false
 
     @Suppress("MemberVisibilityCanBePrivate", "unused")
     companion object {
@@ -76,20 +137,37 @@ class Matrix(val nRows: Int, val nCols: Int, init: (Int, Int) -> Double) {
             Matrix(nRows, nCols) { i, j -> elements[j * nRows + i].toDouble() }
         }
 
-        fun of(byRow: Boolean = true, vararg elements: Number): Matrix {
-            val s = sqrt(elements.size.toDouble()).toInt()
-            return if (byRow) {
-                Matrix(s, s) { i, j -> elements[i * s + j].toDouble() }
-            } else {
-                Matrix(s, s) { i, j -> elements[j * s + i].toDouble() }
-            }
-        }
-
         private inline fun applyBinaryOp(m1: Matrix, m2: Matrix, crossinline op: (Double, Double) -> Double): Matrix {
             require(m1.dimensions == m2.dimensions) { "Dimension mismatch: ${m1.dimensions} and ${m2.dimensions}" }
             return Matrix(m1.dimensions) { i, j ->
                 op(m1[i, j], m2[i, j])
             }
+        }
+    }
+
+    class ByRow {
+        companion object {
+            fun of(vararg elements: Number): Matrix {
+                val s = sqrt(elements.size.toDouble()).toInt()
+                return Matrix(s, s) { i, j -> elements[i * s + j].toDouble() }
+            }
+
+            inline fun fromVectors(nRows: Int, nCols: Int, crossinline func: (Int) -> Vector): Matrix =
+                    with(Array(nRows) { i -> func(i) }) {
+                        return Matrix(nRows, nCols) { i, j -> this[i][j] }
+                    }
+        }
+    }
+
+    class ByColumn {
+        companion object {
+            fun of(vararg elements: Number): Matrix {
+                val s = sqrt(elements.size.toDouble()).toInt()
+                return Matrix(s, s) { i, j -> elements[j * s + i].toDouble() }
+            }
+
+            inline fun fromVectors(nRows: Int, nCols: Int, crossinline func: (Int) -> Vector): Matrix =
+                    Matrix(nRows, nCols) { i, j -> func(j)[i] }
         }
     }
 
@@ -105,13 +183,15 @@ fun Vector.transpose(): Matrix = Matrix(1, dimension) { _, j -> get(j) }
 val Vector.t: Matrix
     get() = transpose()
 
-fun Vector.asMatrix(): Matrix = Matrix(dimension, 1) { i, _ -> get(i)}
+fun Vector.asMatrix(): Matrix = Matrix(dimension, 1) { i, _ -> get(i) }
 
 operator fun Matrix.times(v: Vector): Vector {
     require(nCols == v.dimension) { "Multiplication dimension mismatch: $dimensions and (${v.dimension})" }
     return Vector(nRows) { i -> (0 until nCols).sumByDouble { j -> get(i, j) * v[j] } }
 }
 
+fun Matrix.row(i: Int): Vector = Vector(nCols) { j -> get(i, j) }
+
 operator fun Vector.times(m: Matrix): Matrix = asMatrix() * m
 
-operator fun Number.times(m: Matrix): Matrix = with(this.toDouble()) { Matrix(m.dimensions) { i, j -> this * m[i,j]} }
+operator fun Number.times(m: Matrix): Matrix = with(this.toDouble()) { Matrix(m.dimensions) { i, j -> this * m[i, j] } }

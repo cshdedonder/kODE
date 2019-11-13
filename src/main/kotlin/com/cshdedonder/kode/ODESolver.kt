@@ -1,5 +1,8 @@
+@file:Suppress("SpellCheckingInspection", "MemberVisibilityCanBePrivate")
+
 package com.cshdedonder.kode
 
+import com.cshdedonder.kode.math.Matrix
 import com.cshdedonder.kode.math.Vector
 import org.jfree.chart.ChartFactory
 import org.jfree.chart.ChartPanel
@@ -19,13 +22,17 @@ class ODESolver(
     private val save: Boolean = false
 ) {
 
-    fun integrate(): ODEOutput = stepper.integrate().also {
-        if (plot) {
-            with(Chart(it.solution, title, save)) {
-                setSize(1000, 1000)
-                setLocationRelativeTo(null)
-                defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
-                isVisible = true
+    fun integrate(): ODEOutput {
+        println("Using $stepper")
+        return stepper.integrate().also {
+            if (plot) {
+                println("Making plot ...")
+                with(Chart(it.solution, title, save)) {
+                    setSize(1000, 1000)
+                    setLocationRelativeTo(null)
+                    defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE
+                    isVisible = true
+                }
             }
         }
     }
@@ -42,10 +49,17 @@ class ODESolver(
 
 class Chart(solution: ODESolution, plotName: String, save: Boolean) : ApplicationFrame("ODE Plot") {
 
+    /**
+     * Sample the map so that the remaing values have size [size]]/[rate].
+     */
+    private fun <K, V> Map<K, V>.sample(rate: Int): Sequence<Map.Entry<K, V>> =
+                   asSequence().mapIndexedNotNull { i, entry -> if (i % rate == 0) entry else null }
+
+
     private val dataset: XYDataset = XYSeriesCollection().apply {
         val nVars: Int = solution.values.first().dimension
         val componentSeries: Array<XYSeries> = Array(nVars) { i -> XYSeries("y$i") }
-        solution.forEach { (x, v) ->
+        (if(solution.size > 100000) solution.sample(1000) else solution.asSequence()).forEach { (x, v) ->
             for (i in 0 until v.dimension) {
                 componentSeries[i].add(x, v[i])
             }
@@ -57,7 +71,9 @@ class Chart(solution: ODESolution, plotName: String, save: Boolean) : Applicatio
         val chart = ChartFactory.createXYLineChart(plotName, "x", "y", dataset)
         contentPane = ChartPanel(chart)
         if (save) {
-            ChartUtils.saveChartAsPNG(File("$plotName.png"), chart, 800, 8000)
+            var n = plotName.replace(" ","")
+            println("Saving plot as $n.png")
+            ChartUtils.saveChartAsPNG(File("$n.png"), chart, 1000, 800)
         }
     }
 }
@@ -67,29 +83,42 @@ data class ODEOptions(
     val xStart: Double,
     val xStop: Double,
     val startValues: Vector,
-    val problem: ODEProblem, //Autonome notatie
+    val problem: ODEProblem,
     val relativeTolerance: Double? = null,
-    val absoluteTolerance: Double? = null
+    val absoluteTolerance: Double? = null,
+    val jacobian: ODEJacobian? = null
 ) {
     class Builder {
         var hInit: Double = 1e-6
         var xStart: Double = 0.0
         var xStop: Double = 1.0
         lateinit var startValues: Vector
-        lateinit var problem: ODEProblem //Autonome notatie
+        lateinit var problem: ODEProblem
         var relativeTolerance: Double? = null
         var absoluteTolerance: Double? = null
+        var jacobian: ODEJacobian? = null
 
-        fun build(): ODEOptions =
-            ODEOptions(hInit, xStart, xStop, startValues, problem, relativeTolerance, absoluteTolerance)
+        fun build(): ODEOptions {
+            check(relativeTolerance != null || absoluteTolerance != null) { "Specify at least one tolerance." }
+            return ODEOptions(
+                hInit,
+                xStart,
+                xStop,
+                startValues,
+                problem,
+                relativeTolerance,
+                absoluteTolerance,
+                jacobian
+            )
+        }
     }
 }
 
-typealias ODEProblem = (Vector) -> Vector //Autonoom
+typealias ODEProblem = (Double, Vector) -> Vector
 typealias ODESolution = Map<Double, Vector>
+typealias ODEJacobian = (Double, Vector) -> Matrix
 
 data class ODEOutput(
-    val hHistory: List<Double>,
     val solution: ODESolution,
     val successes: Int,
     val failures: Int,
@@ -98,8 +127,8 @@ data class ODEOutput(
     fun report(ps: PrintStream = System.out) = with(ps) {
         println("Elapsed Time: ${elapsedTime}ms")
         println("Number of integration points: ${solution.size}")
-        println("Number of successes/failures (ratio): ${successes}/${failures} (${"%.3f".format(successes.toDouble() / failures)})")
-        println("Average value of h: ${"%e".format(hHistory.average())}")
+        println("Number of failures/successes (ratio): ${failures}/${successes} (${"%.3f".format(failures.toDouble() / successes)})")
+        println("Average h used: ${solution.asSequence().map {it.key}.zipWithNext().map{ it.second - it.first}.average()}")
     }
 }
 
