@@ -3,6 +3,7 @@ package com.cshdedonder.kode
 import com.cshdedonder.kode.math.Vector
 import com.cshdedonder.kode.rungekutta.*
 import java.io.Console
+import java.lang.IllegalArgumentException
 import kotlin.math.PI
 
 private fun Console.readDouble(prompt: String, default: Double): Double = with(readLine("$prompt [$default]: ")) {
@@ -15,8 +16,8 @@ fun main() {
         val mu: Double = readDouble("The value of the problem parameter 'mu'?", 2.0)
         val method: String = readLine("Which method should be used, 'ERK4', 'DIRK3', or 'IRK4'?: ").toUpperCase()
         val hInit: Double = readDouble("Initial value of 'h'?", 1.0E-4)
-        val relTol: Double = readDouble("Relative tolerance?", 1E-6)
-        val absTol: Double = readDouble("Absolute tolerance?", 1E-6)
+        val relTol: Double = readDouble("Relative tolerance?", 1.0E-6)
+        val absTol: Double = readDouble("Absolute tolerance?", 1.0E-6)
         println()
 
         val methodMap: Map<String, (ODEOptions.Builder.() -> Unit) -> Stepper> = mapOf(
@@ -24,6 +25,8 @@ fun main() {
             "DIRK3" to { init -> stepperDIRK3(init) },
             "IRK4" to { init -> stepperIRK4(init) }
         )
+
+        if(!methodMap.containsKey(method)) throw IllegalArgumentException("Method $method is not a valid option.")
 
         val solver: ODESolver = solver {
             stepper = (methodMap.getValue(method)) {
