@@ -41,13 +41,13 @@ abstract class ImplicitRungeKuttaStepper(override val options: ODEOptions, overr
         val solution: MutableMap<Double, Vector> = HashMap()
         var successes = 0
         var failures = 0
-        val pb = ProgressBar("Integrating", (options.xStop*1000).toLong())
+        //val pb = ProgressBar("Integrating", (options.xStop*1000).toLong())
         val elapsedTime: Long = measureTimeMillis {
             var xn: Double = options.xStart
             var yn: Vector = options.startValues
             var h: Double = options.hInit
             solution[xn] = yn
-            pb.stepTo((xn*1000).toLong())
+            //pb.stepTo((xn*1000).toLong())
             while (xn != options.xStop) {
                 h = hCut(h, xn)
                 val (yn1: Vector, yi: Vector) = step(h, xn, yn)
@@ -60,12 +60,12 @@ abstract class ImplicitRungeKuttaStepper(override val options: ODEOptions, overr
                     xn += h
                     yn = yn1
                     solution[xn] = yn
-                    pb.stepTo((xn*1000).toLong())
+                    //pb.stepTo((xn*1000).toLong())
                 }
                 h = h2
             }
         }
-        pb.stop()
+        //pb.stop()
         return ODEOutput(solution, successes, failures, elapsedTime)
     }
 
@@ -100,7 +100,7 @@ class IRK4Stepper(options: ODEOptions) : ImplicitRungeKuttaStepper(
         "implicit ${dt.s}-stage RK method of order ${dt.p}\nIntegrating from ${options.xStart} to ${options.xStop}, starting value ${options.startValues}"
 }
 
-fun ODESolver.Builder.stepperIRK4(init: ODEOptions.Builder.() -> Unit): IRK4Stepper =
+fun stepperIRK4(init: ODEOptions.Builder.() -> Unit): IRK4Stepper =
     IRK4Stepper((ODEOptions.Builder().also(init).build()))
 
 abstract class ExplicitRungeKuttaStepper(override val options: ODEOptions, override val dt: RungeKuttaData) :
@@ -110,13 +110,13 @@ abstract class ExplicitRungeKuttaStepper(override val options: ODEOptions, overr
         val solution: MutableMap<Double, Vector> = HashMap()
         var successes = 0
         var failures = 0
-        val pb = ProgressBar("Integrating", (options.xStop*1000).toLong())
+        //val pb = ProgressBar("Integrating", (options.xStop*1000).toLong())
         val elapsedTime: Long = measureTimeMillis {
             var xn: Double = options.xStart
             var yn: Vector = options.startValues
             var h: Double = options.hInit
             solution[xn] = yn
-            pb.stepTo((xn*1000).toLong())
+            //pb.stepTo((xn*1000).toLong())
             while (xn != options.xStop) {
                 h = hCut(h, xn)
                 val yn1: Vector = step(h, xn, yn)
@@ -131,7 +131,7 @@ abstract class ExplicitRungeKuttaStepper(override val options: ODEOptions, overr
                     xn += h
                     yn = yn1
                     solution[xn] = yn
-                    pb.stepTo((xn*1000).toLong())
+                    //pb.stepTo((xn*1000).toLong())
                 }
                 h = h2
             }
@@ -139,7 +139,7 @@ abstract class ExplicitRungeKuttaStepper(override val options: ODEOptions, overr
         return ODEOutput(solution, successes, failures, elapsedTime)
     }
 
-    protected open fun step(h: Double, xn: Double, yn: Vector): Vector {
+    private fun step(h: Double, xn: Double, yn: Vector): Vector {
         val ks: MutableList<Vector> = ArrayList(dt.s)
         val f: ODEProblem = options.problem
         val c = dt.cButcher
@@ -171,7 +171,7 @@ class ERK4Stepper(options: ODEOptions) : ExplicitRungeKuttaStepper(
         "explicit ${dt.s}-stage RK method of order ${dt.p}\nIntegrating from ${options.xStart} to ${options.xStop}, starting value ${options.startValues}"
 }
 
-fun ODESolver.Builder.stepperERK4(init: ODEOptions.Builder.() -> Unit): ERK4Stepper =
+fun stepperERK4(init: ODEOptions.Builder.() -> Unit): ERK4Stepper =
     ERK4Stepper(ODEOptions.Builder().also(init).build())
 
 class DIRK3Stepper(options: ODEOptions) : ImplicitRungeKuttaStepper(
@@ -182,5 +182,5 @@ class DIRK3Stepper(options: ODEOptions) : ImplicitRungeKuttaStepper(
         "diagonally implicit ${dt.s}-stage RK method of order ${dt.p}\nIntegrating from ${options.xStart} to ${options.xStop}, starting value ${options.startValues}"
 }
 
-fun ODESolver.Builder.stepperDIRK3(init: ODEOptions.Builder.() -> Unit): DIRK3Stepper =
+fun stepperDIRK3(init: ODEOptions.Builder.() -> Unit): DIRK3Stepper =
     DIRK3Stepper(ODEOptions.Builder().also(init).build())

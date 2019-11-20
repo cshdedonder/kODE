@@ -2,22 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2db55626-8b63-484d-b582-0b481279634d" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RKData.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RungeKuttaStepper.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/$CACHE_FILE$" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/$PRODUCT_WORKSPACE_FILE$" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/ODESolver.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/ODESolver.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/RungeKuttaStepper.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Matrix.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Matrix.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Vector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Vector.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RKData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RKData.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RungeKuttaStepper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RungeKuttaStepper.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -103,7 +93,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Kotlin.com.cshdedonder.kode.MainKt">
+  <component name="RunManager" selected="Maven.Package kODE">
     <configuration name="com.cshdedonder.kode.MainKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="kODE" />
       <option name="VM_PARAMETERS" value="-Xms6g" />
@@ -130,6 +120,37 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Package kODE" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="package" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Kotlin.com.cshdedonder.kode.MainKt" />
+      <item itemvalue="Kotlin.com.cshdedonder.kode.math.RootSolverKt" />
+      <item itemvalue="Maven.Package kODE" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Kotlin.com.cshdedonder.kode.MainKt" />
@@ -160,7 +181,11 @@
       <workItem from="1573387791241" duration="45000" />
       <workItem from="1573387872322" duration="2652000" />
       <workItem from="1573392050120" duration="6768000" />
-      <workItem from="1573638532760" duration="1869000" />
+      <workItem from="1573638532760" duration="1897000" />
+      <workItem from="1573641656067" duration="3115000" />
+      <workItem from="1573650790849" duration="662000" />
+      <workItem from="1573655839519" duration="3525000" />
+      <workItem from="1574260525123" duration="3213000" />
     </task>
     <servers />
   </component>
@@ -201,5 +226,26 @@
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/kODE$com_cshdedonder_kode_MainKt.ic" NAME="com.cshdedonder.kode.MainKt Coverage Results" MODIFIED="1573311887161" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+  <component name="com.vaadin.designer2.intellij.settings.SizePresetsSettingsComponent">
+    <option name="sizePresets">
+      <list>
+        <SizePreset>
+          <option name="caption" value="Phone" />
+          <option name="height" value="568" />
+          <option name="width" value="320" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Tablet" />
+          <option name="height" value="1024" />
+          <option name="width" value="768" />
+        </SizePreset>
+        <SizePreset>
+          <option name="caption" value="Desktop" />
+          <option name="height" value="900" />
+          <option name="width" value="1440" />
+        </SizePreset>
+      </list>
+    </option>
   </component>
 </project>

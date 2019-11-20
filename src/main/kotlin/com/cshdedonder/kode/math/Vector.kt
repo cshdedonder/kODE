@@ -60,5 +60,3 @@ class Vector private constructor(private val contents: DoubleArray) {
 operator fun Number.times(v: Vector): Vector = with(toDouble()) { Vector(v.dimension) { i -> this * v[i] } }
 
 fun List<Vector>.sum(): Vector = reduce { v, w -> v + w }
-
-fun Sequence<Vector>.sum(): Vector = reduce { v, w -> v + w }

@@ -13,13 +13,15 @@ object ERK4Data : RungeKuttaData {
     override val s: Int = 4
 
     override val aButcher: Matrix = Matrix.ByRow.of(
-        0, 0, 0, 0,
-        0.5, 0, 0,
-        0, 0, 0.5, 0,
-        0, 0, 0, 1, 0
+        0.0, 0.0, 0.0, 0.0,
+        0.5, 0.0, 0.0, 0.0,
+		0.0, 0.5, 0.0, 0.0,
+		0.0, 0.0, 1.0, 0.0
     )
-    override val bButcher: Vector = Vector.of(1.0 / 6.0, 1.0 / 3.0, 1.0 / 3.0, 1.0 / 6.0)
-    override val cButcher: Vector = Vector.of(0, 0.5, 0.5, 1)
+    override val bButcher: Vector = 
+		Vector.of(1.0 / 6.0, 1.0 / 3.0, 1.0 / 3.0, 1.0 / 6.0)
+    override val cButcher: Vector = 
+		Vector.of(0, 0.5, 0.5, 1)
 
     override val e: Vector = Vector.ones(s)
 }
