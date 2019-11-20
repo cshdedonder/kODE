@@ -1,4 +1,4 @@
-# kODE
+# kODE: een Kotlin Runge-Kutta ODE solver
 ## door Cedric De Donder
 
 Dit is de sourcecode voor Project 2 van het vak Gevorderde Numerieke Methoden van prof. dr. Van Daele.
@@ -7,7 +7,7 @@ Het uitvoerbaar bestand is [hier](https://github.com/cshdedonder/kODE/raw/master
 ```bash
 java -jar kODE.jar
 ```
-en op Windows met 
+en in de shell/prompt op Windows met 
 ```bash
 java -jar ./kODE.jar
 ```
