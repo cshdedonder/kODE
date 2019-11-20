@@ -15,7 +15,7 @@ fun main() {
         val mu: Double = readDouble("The value of the problem parameter 'mu'?", 2.0)
         val method: String = readLine("Which method should be used, 'ERK4', 'DIRK3', or 'IRK4'?: ").toUpperCase()
         val hInit: Double = readDouble("Initial value of 'h'?", 1.0E-4)
-        val relTol: Double = readDouble("Relative tolerance?", 1E-6)cd
+        val relTol: Double = readDouble("Relative tolerance?", 1E-6)
         val absTol: Double = readDouble("Absolute tolerance?", 1E-6)
         println()
 

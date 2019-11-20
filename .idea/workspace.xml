@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2db55626-8b63-484d-b582-0b481279634d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/Main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Vector.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/math/Vector.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RKData.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RKData.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RungeKuttaStepper.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/cshdedonder/kode/rungekutta/RungeKuttaStepper.kt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -185,7 +180,7 @@
       <workItem from="1573641656067" duration="3115000" />
       <workItem from="1573650790849" duration="662000" />
       <workItem from="1573655839519" duration="3525000" />
-      <workItem from="1574260525123" duration="3213000" />
+      <workItem from="1574260525123" duration="3462000" />
     </task>
     <servers />
   </component>
